@@ -1,16 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pinindu Chethiya — UX Designer</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── VARIABLES ─── */
+:root {
+  --bg:     #1a1a1a;
+  --bg2:    #141414;
+  --panel:  #111111;
+  --line:   rgba(255,255,255,0.08);
+  --muted:  #444;
+  --mid:    #888;
+  --text:   #bbb;
+  --white:  #f2f2f2;
+  --gold:   #c9a040;
+  --sans:   'Barlow', sans-serif;
+  --cond:   'Barlow Condensed', sans-serif;
+}
 
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Pinindu Chethiya</title>
-      <style>html, body { height: 100%; margin: 0; } #root { height: 100%; }</style>
-    </head>
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  cursor: none;
+}
+a { text-decoration: none; color: inherit; }
+img { display: block; }
 
-    <body>
-      <div id="root"></div>
-      <script type="module" src="/src/main.tsx"></script>
-    </body>
-  </html>
-  
+/* ─── CURSOR ─── */
+#cur {
+  position: fixed; z-index: 9999; pointer-events: none;
+  width: 8px; height: 8px; background: var(--gold);
+  border-radius: 50%; transform: translate(-50%,-50%);
+  transition: width .3s, height .3s;
+  mix-blend-mode: screen;
+}
+#cur-ring {
+  position: fixed; z-index: 9998; pointer-events: none;
+  width: 40px; height: 40px;
+  border: 1px solid rgba(201,160,64,.4);
+  border-radius: 50%; transform: translate(-50%,-50%);
+  transition: width .35s, height .35s, border-color .3s;
+}
+#cur.big, #cur-ring.big { width: 64px; height: 64px; }
+#cur-ring.big { border-color: rgba(201,160,64,.7); }
+
+/* Hide cursor on touch devices */
+@media (pointer: coarse) {
+  #cur, #cur-ring { display: none; }
+  body { cursor: auto; }
+}
+
+/* ─── LOADER ─── */
+#loader {
+  position: fixed; inset: 0; background: #0e0e0e; z-index: 10000;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2rem;
+  transition: opacity .7s ease, visibility .7s;
+}
+#loader.out { opacity: 0; visibility: hidden; pointer-events: none; }
+.ld-name {
+  font-family: var(--cond); font-weight: 700;
+  font-size: clamp(2.5rem,6vw,5rem); letter-spacing: .12em;
+  text-transform: uppercase; color: var(--white);
+}
+.ld-name span { color: var(--gold); }
+.ld-track {
+  width: 200px; height: 1px; background: var(--muted); position: relative;
+}
+.ld-fill {
+  position: absolute; left: 0; top: 0; height: 100%;
+  background: var(--gold); width: 0;
+  transition: width 1s cubic-bezier(.16,1,.3,1);
+}
+.ld-pct {
+  font-family: var(--cond); font-size: .75rem; letter-spacing: .2em;
+  color: var(--muted); text-transform: uppercase;
+}
+
+/* ─── SIDEBAR ─── */
+#sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0;
+  width: 56px; z-index: 50;
+  border-right: 1px solid var(--line);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: space-between;
+  padding: 2rem 0;
+  background: var(--panel);
+}
+.sb-logo {
+  font-family: var(--cond); font-weight: 700; font-size: 1rem;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--white); writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+.sb-socials {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 1.8rem;
+}
+.sb-s {
+  font-family: var(--cond); font-size: 0.8rem; font-weight: 600;
+  letter-spacing: .15em; text-transform: uppercase;
+  color: var(--muted); writing-mode: vertical-rl;
+  transform: rotate(180deg); transition: color .2s;
+}
+.sb-s:hover { color: var(--gold); }
+.sb-num {
+  font-family: var(--cond); font-size: .75rem; letter-spacing: .1em;
+  color: var(--muted);
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 56px; right: 0;
+  z-index: 100; display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 1.6rem 3rem;
+  transition: background .4s, border-color .4s;
+  border-bottom: 1px solid transparent;
+}
+nav.scrolled {
+  background: rgba(20,20,20,.95);
+  backdrop-filter: blur(20px);
+  border-color: var(--line);
+}
+.nav-brand {
+  font-family: var(--cond); font-weight: 700; font-size: 1.3rem;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--white);
+}
+.nav-brand span { color: var(--gold); }
+.nav-links {
+  display: flex; list-style: none; gap: 2.5rem;
+}
+.nav-links a {
+  font-family: var(--cond); font-size: 0.85rem; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--mid);
+  transition: color .2s; position: relative;
+}
+.nav-links a.active { color: var(--gold); }
+.nav-links a.active::after {
+  content: ''; position: absolute; bottom: -6px; left: 0;
+  width: 100%; height: 1px; background: var(--gold);
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  font-family: var(--cond); font-size: 0.8rem; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--bg); background: var(--gold);
+  padding: .5rem 1.4rem; border-radius: 2px;
+  transition: opacity .2s;
+}
+.nav-cta:hover { opacity: .85; }
+
+/* ─── SCROLL PROGRESS ─── */
+#prog {
+  position: fixed; top: 0; left: 56px; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--gold), #e
