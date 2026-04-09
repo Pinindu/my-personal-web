@@ -4,162 +4,715 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pinindu Chethiya — UX Designer</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Lora:ital,wght@0,400;1,400;1,500&display=swap" rel="stylesheet">
 <style>
-/* ─── VARIABLES ─── */
-:root {
-  --bg:     #1a1a1a;
-  --bg2:    #141414;
-  --panel:  #111111;
-  --line:   rgba(255,255,255,0.08);
-  --muted:  #444;
-  --mid:    #888;
-  --text:   #bbb;
-  --white:  #f2f2f2;
-  --gold:   #c9a040;
-  --sans:   'Barlow', sans-serif;
-  --cond:   'Barlow Condensed', sans-serif;
+/* ══ DESIGN TOKENS ══ */
+:root{
+  --bg:#0a0a0b; --bg2:#111113; --bg3:#18181c; --surface:#1c1c21;
+  --border:rgba(255,255,255,.07); --border2:rgba(255,255,255,.12);
+  --text:#f0ede8; --muted:#7a7880;
+  --accent:#c8f060; --accent2:#e8d5b0; --accent3:#9b8cff;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;cursor:none;}
+
+/* ── CURSOR ── */
+#cur{width:10px;height:10px;background:var(--accent);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+#ring{width:36px;height:36px;border:1px solid rgba(200,240,96,.3);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s,border-color .2s;}
+#cur.on{width:5px;height:5px;} #ring.on{width:58px;height:58px;border-color:rgba(200,240,96,.6);}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;}
+nav::before{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,10,11,.93) 0%,transparent 100%);pointer-events:none;}
+.logo{font-weight:800;font-size:1.1rem;letter-spacing:-.02em;color:var(--text);text-decoration:none;position:relative;z-index:1;}
+.logo span{color:var(--accent);}
+.nav-links{display:flex;gap:2.5rem;list-style:none;position:relative;z-index:1;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--accent);transition:width .3s;}
+.nav-links a:hover{color:var(--text);} .nav-links a:hover::after{width:100%;}
+
+/* ── HERO ── */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:8rem 3rem 4rem;position:relative;overflow:hidden;}
+.hgrid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(200,240,96,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(200,240,96,.022) 1px,transparent 1px);background-size:80px 80px;animation:gd 22s linear infinite;}
+@keyframes gd{to{background-position:80px 80px}}
+.horb{position:absolute;border-radius:50%;filter:blur(110px);pointer-events:none;}
+.ho1{width:680px;height:680px;background:radial-gradient(circle,rgba(155,140,255,.16) 0%,transparent 70%);top:-240px;right:-140px;animation:ho1 9s ease-in-out infinite;}
+.ho2{width:440px;height:440px;background:radial-gradient(circle,rgba(200,240,96,.08) 0%,transparent 70%);bottom:-80px;left:-80px;animation:ho2 11s ease-in-out infinite;}
+.ho3{width:260px;height:260px;background:radial-gradient(circle,rgba(232,213,176,.055) 0%,transparent 70%);top:45%;left:33%;animation:ho3 7s ease-in-out infinite;}
+@keyframes ho1{0%,100%{transform:translate(0,0)}50%{transform:translate(-38px,48px)}}
+@keyframes ho2{0%,100%{transform:translate(0,0)}50%{transform:translate(45px,-35px)}}
+@keyframes ho3{0%,100%{transform:translate(0,0)}50%{transform:translate(-18px,24px)}}
+.hshapes{position:absolute;inset:0;pointer-events:none;}
+.hs{position:absolute;border:1px solid rgba(200,240,96,.08);border-radius:50%;}
+.hs1{width:176px;height:176px;top:14%;right:11%;animation:hss 25s linear infinite,hsf1 6s ease-in-out infinite;}
+.hs2{width:76px;height:76px;top:64%;right:21%;border-color:rgba(155,140,255,.13);animation:hss 17s linear infinite reverse,hsf2 8s ease-in-out infinite;}
+.hs3{width:40px;height:40px;top:29%;right:27%;border-color:rgba(232,213,176,.1);border-radius:6px;animation:hss 12s linear infinite,hsf1 5s ease-in-out infinite 1s;}
+.hs4{width:115px;height:115px;bottom:26%;left:7%;border-color:rgba(200,240,96,.05);animation:hss 30s linear infinite reverse,hsf2 9s ease-in-out infinite 2s;}
+.hs5{width:55px;height:55px;top:54%;left:19%;border-color:rgba(155,140,255,.08);border-radius:5px;animation:hss 20s linear infinite,hsf2 7s ease-in-out infinite .5s;}
+@keyframes hss{to{transform:rotate(360deg)}}
+@keyframes hsf1{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-20px) rotate(180deg)}}
+@keyframes hsf2{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(16px) rotate(180deg)}}
+.hpar{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.hp{position:absolute;width:2px;height:2px;border-radius:50%;opacity:0;animation:hpf var(--d) ease-in-out var(--dl) infinite;}
+@keyframes hpf{0%{opacity:0;transform:translateY(0) scale(0)}18%{opacity:.5;transform:translateY(-15px) scale(1)}80%{opacity:.15}100%{opacity:0;transform:translateY(-80px) scale(0)}}
+.hdiag{position:absolute;top:0;right:0;width:44%;height:100%;pointer-events:none;overflow:hidden;opacity:.022;}
+.hdiag::before{content:'';position:absolute;inset:-50%;background:repeating-linear-gradient(45deg,var(--text) 0,var(--text) 1px,transparent 1px,transparent 38px);}
+.hcontent{position:relative;max-width:1100px;margin:0 auto;width:100%;}
+.htag{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--border2);border-radius:100px;padding:.4rem 1rem;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);margin-bottom:2rem;letter-spacing:.05em;opacity:0;animation:fu .8s ease .3s forwards;}
+.htag::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hh1{font-size:clamp(3.5rem,8vw,8rem);font-weight:800;line-height:.9;letter-spacing:-.04em;margin-bottom:1.5rem;perspective:600px;}
+.w{display:inline-block;opacity:0;transform:translateY(60px) rotateX(-20deg);animation:wr .75s var(--ease) forwards;}
+.wi{font-family:'Lora',serif;font-style:italic;font-weight:400;color:var(--accent2);}
+.wbr{display:block;}
+@keyframes wr{to{opacity:1;transform:translateY(0) rotateX(0)}}
+.hdesc{max-width:520px;font-size:1.05rem;line-height:1.7;color:var(--muted);font-family:'DM Mono',monospace;font-weight:300;margin-bottom:3rem;opacity:0;animation:fu .9s ease 1.4s forwards;}
+.hctas{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fu .9s ease 1.6s forwards;}
+.btn{background:var(--accent);color:#0a0a0b;padding:.9rem 2rem;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;border-radius:100px;transition:transform .2s,box-shadow .2s;display:inline-block;border:none;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(200,240,96,.3);}
+.btng{background:transparent;color:var(--text);border:1px solid var(--border2);padding:.9rem 2rem;font-family:'Syne',sans-serif;font-weight:600;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;border-radius:100px;transition:border-color .2s,background .2s;display:inline-block;}
+.btng:hover{border-color:var(--text);background:rgba(255,255,255,.04);}
+.scrhint{position:absolute;bottom:2.5rem;left:3rem;display:flex;align-items:center;gap:.8rem;font-family:'DM Mono',monospace;font-size:.68rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;opacity:0;animation:fu 1s ease 2s forwards;}
+.scrline{width:40px;height:1px;background:var(--muted);position:relative;overflow:hidden;}
+.scrline::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--accent);animation:scr 2.2s ease infinite;}
+@keyframes scr{0%{left:-100%}100%{left:100%}}
+
+/* ── TICKER ── */
+.ticker{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1rem 0;overflow:hidden;background:var(--bg2);}
+.ttrack{display:flex;animation:tk 28s linear infinite;width:max-content;}
+.titem{white-space:nowrap;padding:0 2.5rem;font-family:'DM Mono',monospace;font-size:.75rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:2rem;}
+.titem span{color:var(--accent);}
+@keyframes tk{to{transform:translateX(-50%)}}
+
+/* ── SECTION CHROME ── */
+.sec{padding:7rem 3rem;max-width:1200px;margin:0 auto;}
+.slabel{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:3rem;display:flex;align-items:center;gap:1rem;}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border);max-width:70px;}
+
+/* ── ABOUT ── */
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;}
+.atext h2{font-size:clamp(2.2rem,4vw,3.5rem);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:1.5rem;}
+.atext h2 em{font-family:'Lora',serif;font-style:italic;font-weight:400;color:var(--accent2);}
+.atext p{color:var(--muted);line-height:1.8;margin-bottom:1.2rem;font-family:'DM Mono',monospace;font-weight:300;}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.5px;background:var(--border);border:1px solid var(--border);}
+.scard{background:var(--bg2);padding:2rem;position:relative;overflow:hidden;transition:background .3s;}
+.scard:hover{background:var(--bg3);}
+.scard::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+.scard:hover::before{transform:scaleX(1);}
+.snum{font-size:3rem;font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:.4rem;}
+.snum .a{color:var(--accent);}
+.slbl{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}
+
+/* ══════════════════════════════════════════════
+   PROJECTS — FULL-WIDTH IMMERSIVE ACCORDION
+   Each project is a full-width "chapter" that
+   expands to reveal details. Uses the SAME
+   dark bg, DM Mono, Syne, accent-green system
+   as the rest of the site. No card borders,
+   no colored boxes — pure typography + motion.
+══════════════════════════════════════════════ */
+#projects{border-top:1px solid var(--border);}
+.proj-wrap{max-width:1200px;margin:0 auto;padding:7rem 3rem;}
+.proj-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:5rem;flex-wrap:wrap;gap:2rem;}
+.proj-header h2{font-size:clamp(2.5rem,5vw,4.2rem);font-weight:800;letter-spacing:-.04em;line-height:.93;}
+.proj-header h2 em{font-family:'Lora',serif;font-style:italic;font-weight:400;color:var(--accent2);}
+.bpill{display:inline-flex;align-items:center;gap:.55rem;font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--border2);border-radius:100px;padding:.5rem 1.2rem;transition:all .25s;}
+.bpill:hover{border-color:var(--accent);color:var(--accent);}
+.bpill svg{flex-shrink:0;}
+
+/* The accordion list */
+.plist{border-top:1px solid var(--border);}
+
+.prow{
+  border-bottom:1px solid var(--border);
+  position:relative;
+  cursor:pointer;
+  user-select:none;
 }
 
-/* ─── RESET ─── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
-  overflow-x: hidden;
-  cursor: none;
+/* ── Collapsed header ── */
+.prow-head{
+  display:grid;
+  grid-template-columns:72px 1fr max-content 52px;
+  align-items:center;
+  gap:2rem;
+  padding:2rem 0;
+  transition:padding-left .35s var(--ease);
 }
-a { text-decoration: none; color: inherit; }
-img { display: block; }
+.prow:hover .prow-head{padding-left:.6rem;}
+.prow.open .prow-head{padding-left:.6rem;}
 
-/* ─── CURSOR ─── */
-#cur {
-  position: fixed; z-index: 9999; pointer-events: none;
-  width: 8px; height: 8px; background: var(--gold);
-  border-radius: 50%; transform: translate(-50%,-50%);
-  transition: width .3s, height .3s;
-  mix-blend-mode: screen;
+.pidx{
+  font-family:'DM Mono',monospace;
+  font-size:.65rem;
+  letter-spacing:.15em;
+  color:var(--muted);
+  text-transform:uppercase;
+  transition:color .3s;
 }
-#cur-ring {
-  position: fixed; z-index: 9998; pointer-events: none;
-  width: 40px; height: 40px;
-  border: 1px solid rgba(201,160,64,.4);
-  border-radius: 50%; transform: translate(-50%,-50%);
-  transition: width .35s, height .35s, border-color .3s;
-}
-#cur.big, #cur-ring.big { width: 64px; height: 64px; }
-#cur-ring.big { border-color: rgba(201,160,64,.7); }
+.prow.open .pidx,.prow:hover .pidx{color:var(--accent);}
 
-/* Hide cursor on touch devices */
-@media (pointer: coarse) {
-  #cur, #cur-ring { display: none; }
-  body { cursor: auto; }
+.ptitle-wrap{display:flex;flex-direction:column;gap:.25rem;}
+.ptitle{
+  font-size:clamp(1.1rem,2.5vw,1.65rem);
+  font-weight:700;
+  letter-spacing:-.025em;
+  line-height:1.15;
+  transition:color .2s;
 }
+.pcat{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;transition:color .3s;}
+.prow.open .pcat,.prow:hover .pcat{color:var(--accent);}
 
-/* ─── LOADER ─── */
-#loader {
-  position: fixed; inset: 0; background: #0e0e0e; z-index: 10000;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 2rem;
-  transition: opacity .7s ease, visibility .7s;
-}
-#loader.out { opacity: 0; visibility: hidden; pointer-events: none; }
-.ld-name {
-  font-family: var(--cond); font-weight: 700;
-  font-size: clamp(2.5rem,6vw,5rem); letter-spacing: .12em;
-  text-transform: uppercase; color: var(--white);
-}
-.ld-name span { color: var(--gold); }
-.ld-track {
-  width: 200px; height: 1px; background: var(--muted); position: relative;
-}
-.ld-fill {
-  position: absolute; left: 0; top: 0; height: 100%;
-  background: var(--gold); width: 0;
-  transition: width 1s cubic-bezier(.16,1,.3,1);
-}
-.ld-pct {
-  font-family: var(--cond); font-size: .75rem; letter-spacing: .2em;
-  color: var(--muted); text-transform: uppercase;
-}
+.ptags{display:flex;gap:.4rem;flex-wrap:wrap;}
+.ptag{font-family:'DM Mono',monospace;font-size:.6rem;padding:.2rem .65rem;border:1px solid var(--border);border-radius:100px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;transition:border-color .25s,color .25s;}
+.prow.open .ptag,.prow:hover .ptag{border-color:rgba(200,240,96,.2);color:rgba(200,240,96,.65);}
 
-/* ─── SIDEBAR ─── */
-#sidebar {
-  position: fixed; left: 0; top: 0; bottom: 0;
-  width: 56px; z-index: 50;
-  border-right: 1px solid var(--line);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: space-between;
-  padding: 2rem 0;
-  background: var(--panel);
+/* Plus/minus toggle */
+.ptoggle{
+  width:40px;height:40px;
+  border:1px solid var(--border2);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);
+  font-size:1.1rem;
+  transition:border-color .25s,color .25s,background .25s,transform .4s var(--ease);
+  flex-shrink:0;
 }
-.sb-logo {
-  font-family: var(--cond); font-weight: 700; font-size: 1rem;
-  letter-spacing: .08em; text-transform: uppercase;
-  color: var(--white); writing-mode: vertical-rl;
-  transform: rotate(180deg);
+.prow:hover .ptoggle{border-color:var(--border2);color:var(--text);}
+.prow.open .ptoggle{border-color:var(--accent);color:var(--accent);background:rgba(200,240,96,.08);transform:rotate(45deg);}
+
+/* ── Expanded panel ── */
+.prow-body{
+  display:grid;
+  grid-template-rows:0fr;
+  transition:grid-template-rows .5s var(--ease);
+  overflow:hidden;
 }
-.sb-socials {
-  display: flex; flex-direction: column;
-  align-items: center; gap: 1.8rem;
+.prow.open .prow-body{grid-template-rows:1fr;}
+.prow-body-inner{
+  overflow:hidden;
+  padding:0 0 0 72px; /* align with title column */
 }
-.sb-s {
-  font-family: var(--cond); font-size: 0.8rem; font-weight: 600;
-  letter-spacing: .15em; text-transform: uppercase;
-  color: var(--muted); writing-mode: vertical-rl;
-  transform: rotate(180deg); transition: color .2s;
-}
-.sb-s:hover { color: var(--gold); }
-.sb-num {
-  font-family: var(--cond); font-size: .75rem; letter-spacing: .1em;
-  color: var(--muted);
+.prow.open .prow-body-inner{padding-bottom:2.5rem;}
+
+.pdetail{
+  display:grid;
+  grid-template-columns:1fr 260px;
+  gap:3rem;
+  padding-top:1.5rem;
+  border-top:1px solid var(--border);
+  margin-right:92px; /* align with ptags col */
 }
 
-/* ─── NAV ─── */
-nav {
-  position: fixed; top: 0; left: 56px; right: 0;
-  z-index: 100; display: flex; align-items: center;
-  justify-content: space-between;
-  padding: 1.6rem 3rem;
-  transition: background .4s, border-color .4s;
-  border-bottom: 1px solid transparent;
+.pdesc{
+  font-family:'DM Mono',monospace;
+  font-size:.88rem;
+  color:var(--muted);
+  line-height:1.85;
+  font-weight:300;
+  max-width:560px;
 }
-nav.scrolled {
-  background: rgba(20,20,20,.95);
-  backdrop-filter: blur(20px);
-  border-color: var(--line);
-}
-.nav-brand {
-  font-family: var(--cond); font-weight: 700; font-size: 1.3rem;
-  letter-spacing: .1em; text-transform: uppercase; color: var(--white);
-}
-.nav-brand span { color: var(--gold); }
-.nav-links {
-  display: flex; list-style: none; gap: 2.5rem;
-}
-.nav-links a {
-  font-family: var(--cond); font-size: 0.85rem; font-weight: 600;
-  letter-spacing: .14em; text-transform: uppercase; color: var(--mid);
-  transition: color .2s; position: relative;
-}
-.nav-links a.active { color: var(--gold); }
-.nav-links a.active::after {
-  content: ''; position: absolute; bottom: -6px; left: 0;
-  width: 100%; height: 1px; background: var(--gold);
-}
-.nav-links a:hover { color: var(--white); }
-.nav-cta {
-  font-family: var(--cond); font-size: 0.8rem; font-weight: 700;
-  letter-spacing: .14em; text-transform: uppercase;
-  color: var(--bg); background: var(--gold);
-  padding: .5rem 1.4rem; border-radius: 2px;
-  transition: opacity .2s;
-}
-.nav-cta:hover { opacity: .85; }
 
-/* ─── SCROLL PROGRESS ─── */
-#prog {
-  position: fixed; top: 0; left: 56px; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--gold), #e
+.pmeta{display:flex;flex-direction:column;gap:1.2rem;}
+.pmeta-row{display:flex;flex-direction:column;gap:.25rem;}
+.pmeta-label{font-family:'DM Mono',monospace;font-size:.6rem;color:rgba(200,240,96,.5);letter-spacing:.15em;text-transform:uppercase;}
+.pmeta-val{font-family:'DM Mono',monospace;font-size:.78rem;color:var(--text);}
+
+/* The "View project" link inside expanded panel */
+.pview{
+  display:inline-flex;
+  align-items:center;
+  gap:.6rem;
+  margin-top:1.8rem;
+  font-family:'DM Mono',monospace;
+  font-size:.72rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  text-decoration:none;
+  color:var(--accent);
+  padding-bottom:.2rem;
+  border-bottom:1px solid rgba(200,240,96,.3);
+  transition:gap .2s,border-color .2s;
+}
+.pview:hover{gap:1rem;border-color:var(--accent);}
+.pview-arrow{font-size:.9rem;transition:transform .2s;}
+.pview:hover .pview-arrow{transform:translate(3px,-3px);}
+
+/* Accent bar that grows on open */
+.prow::before{
+  content:'';
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:2px;
+  background:var(--accent);
+  transform:scaleY(0);
+  transform-origin:bottom;
+  transition:transform .4s var(--ease);
+}
+.prow.open::before{transform:scaleY(1);}
+
+/* ── BEHANCE FOOTER STRIP ── */
+.bstrip{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:2rem;
+  margin-top:4rem;
+  padding:2rem 2.5rem;
+  border:1px solid var(--border);
+  background:var(--bg2);
+  position:relative;overflow:hidden;
+}
+.bstrip::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,var(--accent),transparent 60%);}
+.bstrip-text h3{font-size:1.1rem;font-weight:700;letter-spacing:-.01em;margin-bottom:.3rem;}
+.bstrip-text p{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted);}
+.bstrip-glow{position:absolute;width:260px;height:260px;background:rgba(200,240,96,.04);border-radius:50%;filter:blur(50px);top:-80px;right:-60px;pointer-events:none;}
+
+/* ── PROCESS ── */
+#process{border-top:1px solid var(--border);}
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);}
+.pstep{background:var(--bg2);padding:2.2rem 1.8rem;position:relative;overflow:hidden;transition:background .3s;}
+.pstep:hover{background:var(--bg3);}
+.pstep-n{font-family:'DM Mono',monospace;font-size:2.8rem;font-weight:400;color:rgba(200,240,96,.06);letter-spacing:-.04em;line-height:1;margin-bottom:1.2rem;transition:color .3s;}
+.pstep:hover .pstep-n{color:rgba(200,240,96,.14);}
+.pstep-t{font-size:1rem;font-weight:700;margin-bottom:.6rem;}
+.pstep-d{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted);line-height:1.7;font-weight:300;}
+.pstep::after{content:'';position:absolute;bottom:0;left:0;height:2px;width:0;background:var(--accent);transition:width .45s var(--ease);}
+.pstep:hover::after{width:100%;}
+
+/* ── EXPERIENCE ── */
+#experience{border-top:1px solid var(--border);background:var(--bg2);}
+.exp-inner{max-width:1200px;margin:0 auto;padding:7rem 3rem;}
+.elist{display:flex;flex-direction:column;}
+.erow{display:grid;grid-template-columns:200px 1fr auto;gap:2rem;padding:2.5rem 0;border-bottom:1px solid var(--border);align-items:start;position:relative;}
+.erow::before{content:'';position:absolute;left:-3rem;right:-3rem;top:0;bottom:0;background:var(--surface);opacity:0;transition:opacity .3s;pointer-events:none;}
+.erow:hover::before{opacity:1;}
+.erow>*{position:relative;}
+.eyr{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted);letter-spacing:.05em;padding-top:.2rem;}
+.eco{font-size:1.2rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.3rem;}
+.erl{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--accent);letter-spacing:.05em;margin-bottom:.7rem;}
+.eds{font-size:.87rem;color:var(--muted);line-height:1.7;font-family:'DM Mono',monospace;font-weight:300;max-width:500px;}
+.earr{color:var(--border2);font-size:1.2rem;padding-top:.2rem;transition:color .2s,transform .2s;}
+.erow:hover .earr{color:var(--accent);transform:translate(4px,-4px);}
+
+/* ── SKILLS ── */
+.sk-h2{font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-.03em;margin-bottom:3rem;}
+.sk-h2 em{font-family:'Lora',serif;font-style:italic;font-weight:400;color:var(--accent2);}
+.skclusters{display:flex;flex-direction:column;gap:1rem;}
+.skc{border:1px solid var(--border);overflow:hidden;transition:border-color .3s;}
+.skc:hover{border-color:var(--border2);}
+.skch{padding:1.2rem 1.5rem;display:flex;align-items:center;gap:1rem;cursor:pointer;background:var(--bg2);user-select:none;transition:background .2s;}
+.skch:hover{background:var(--bg3);}
+.skcn{font-family:'DM Mono',monospace;font-size:.63rem;color:var(--muted);letter-spacing:.1em;min-width:24px;}
+.skcname{font-weight:700;font-size:.9rem;flex:1;}
+.skct{color:var(--muted);font-size:.9rem;}
+.skcb{display:flex;flex-wrap:wrap;gap:.5rem;padding:1rem 1.5rem 1.2rem;border-top:1px solid var(--border);background:var(--bg);}
+.sktag{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.06em;padding:.38rem .85rem;border:1px solid var(--border);border-radius:100px;color:var(--muted);transition:border-color .2s,color .2s;text-transform:uppercase;}
+.sktag:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ── CONTACT ── */
+#contact{border-top:1px solid var(--border);}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:end;}
+.ctext h2{font-size:clamp(3rem,6vw,5rem);font-weight:800;letter-spacing:-.04em;line-height:.95;margin-bottom:1.5rem;}
+.ctext h2 em{font-family:'Lora',serif;font-style:italic;font-weight:400;color:var(--accent2);}
+.ctext p{color:var(--muted);font-family:'DM Mono',monospace;font-weight:300;font-size:.9rem;line-height:1.7;max-width:380px;}
+.clinks{display:flex;flex-direction:column;}
+.clink{display:flex;align-items:center;justify-content:space-between;padding:1.4rem 0;border-bottom:1px solid var(--border);text-decoration:none;color:var(--text);transition:padding-left .3s;}
+.clink:first-child{border-top:1px solid var(--border);}
+.clink:hover{padding-left:.5rem;}
+.cll{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.18rem;}
+.clv{font-weight:600;font-size:1rem;}
+.cla{color:var(--muted);transition:color .2s,transform .2s;}
+.clink:hover .cla{color:var(--accent);transform:translate(4px,-4px);}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;}
+.fcopy{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);}
+.fname{font-weight:800;font-size:.9rem;letter-spacing:-.02em;}
+
+/* ── SHARED ANIM ── */
+@keyframes fu{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.rv{opacity:0;transform:translateY(28px);transition:opacity .65s,transform .65s;}
+.rv.in{opacity:1;transform:translateY(0);}
+
+/* ── MOBILE ── */
+@media(max-width:900px){
+  nav{padding:1.2rem 1.5rem;} .nav-links{gap:1.5rem;}
+  .sec{padding:5rem 1.5rem;}
+  .hh1{font-size:3rem;}
+  .agrid{grid-template-columns:1fr;gap:3rem;}
+  .erow{grid-template-columns:1fr;} .earr{display:none;}
+  .cgrid{grid-template-columns:1fr;gap:3rem;}
+  footer{flex-direction:column;gap:1rem;text-align:center;}
+  #hero{padding:6rem 1.5rem 3rem;} .scrhint{left:1.5rem;}
+  .pgrid{grid-template-columns:1fr 1fr;}
+  .prow-head{grid-template-columns:52px 1fr 44px;gap:1rem;}
+  .ptags{display:none;}
+  .pdetail{grid-template-columns:1fr;margin-right:0;}
+  .prow-body-inner{padding-left:52px;}
+  .proj-header{flex-direction:column;align-items:flex-start;}
+  .proj-wrap{padding:5rem 1.5rem;}
+  .bstrip{flex-direction:column;align-items:flex-start;}
+  .exp-inner{padding:5rem 1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">P<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#experience">Work</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hgrid"></div>
+  <div class="horb ho1"></div><div class="horb ho2"></div><div class="horb ho3"></div>
+  <div class="hdiag"></div>
+  <div class="hshapes"><div class="hs hs1"></div><div class="hs hs2"></div><div class="hs hs3"></div><div class="hs hs4"></div><div class="hs hs5"></div></div>
+  <div class="hpar" id="hpar"></div>
+  <div class="hcontent">
+    <div class="htag">Available for new projects</div>
+    <h1 class="hh1">
+      <span class="w" style="animation-delay:.35s">Designing</span>
+      <span class="wbr"></span>
+      <span class="w wi" style="animation-delay:.6s">human</span>
+      <span class="wbr"></span>
+      <span class="w" style="animation-delay:.85s">experiences</span>
+    </h1>
+    <p class="hdesc">Pinindu Chethiya — UX Designer with 4+ years turning complex problems into simple, beautiful digital products.</p>
+    <div class="hctas">
+      <a href="#contact" class="btn">Start a conversation</a>
+      <a href="#projects" class="btng">See my work</a>
+    </div>
+  </div>
+  <div class="scrhint"><div class="scrline"></div>Scroll to explore</div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker"><div class="ttrack">
+  <div class="titem">UX Research <span>✦</span> Wireframing <span>✦</span> Prototyping <span>✦</span> Visual Design <span>✦</span> User Psychology <span>✦</span> Conversational AI <span>✦</span> Scrum <span>✦</span> Business Development <span>✦</span></div>
+  <div class="titem">UX Research <span>✦</span> Wireframing <span>✦</span> Prototyping <span>✦</span> Visual Design <span>✦</span> User Psychology <span>✦</span> Conversational AI <span>✦</span> Scrum <span>✦</span> Business Development <span>✦</span></div>
+</div></div>
+
+<!-- ABOUT -->
+<section id="about" class="sec">
+  <div class="slabel">About me</div>
+  <div class="agrid">
+    <div class="atext rv">
+      <h2>Crafting clarity<br>from <em>complexity</em></h2>
+      <p>I'm a passionate UX Designer based in Sri Lanka with 4+ years of experience delivering user-centered digital experiences that align with real business goals.</p>
+      <p>My process blends deep user research with strong visual instinct — I design what works for the people who use it, not just what looks beautiful.</p>
+      <p>From fintech to health-tech, enterprise software to creative platforms — I've helped teams across the globe ship products people genuinely enjoy using.</p>
+    </div>
+    <div class="sgrid rv" style="transition-delay:.15s">
+      <div class="scard"><div class="snum"><span class="count" data-t="4">0</span><span class="a">+</span></div><div class="slbl">Years of experience</div></div>
+      <div class="scard"><div class="snum"><span class="count" data-t="10">0</span><span class="a">+</span></div><div class="slbl">Companies worked with</div></div>
+      <div class="scard"><div class="snum"><span class="count" data-t="3">0</span></div><div class="slbl">Countries worked in</div></div>
+      <div class="scard"><div class="snum"><span class="count" data-t="1">0</span></div><div class="slbl">Hackathon award won</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     PROJECTS — CLEAN ACCORDION
+══════════════════════════════ -->
+<div id="projects">
+<div class="proj-wrap">
+
+  <div class="slabel">Selected work</div>
+
+  <div class="proj-header rv">
+    <h2>Case studies &amp;<br><em>projects</em></h2>
+    <a href="https://www.behance.net/MCEYE_Graphics" target="_blank" class="bpill">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 1.202.836 1.87 1.862 1.87.872 0 1.383-.654 1.571-1.07l2.323.23zm-7.22-4h4.087c-.088-1.143-.82-1.83-1.925-1.83-1.076 0-1.89.702-2.162 1.83zM7.4 14.2c.622 0 1.2-.267 1.2-1.2 0-.934-.578-1.2-1.2-1.2H5v2.4h2.4zm.3-4.2C8.3 10 9 9.4 9 8.5S8.3 7 7.7 7H5v3h2.7zM2 19V5h6.16c2.421 0 4.04 1.24 4.04 3.393 0 1.37-.67 2.374-1.78 2.944C12.08 11.8 13 13.08 13 14.6c0 2.574-1.9 4.4-4.76 4.4H2z"/></svg>
+      Behance profile ↗
+    </a>
+  </div>
+
+  <div class="plist rv" style="transition-delay:.1s">
+
+    <!-- 01 -->
+    <div class="prow" data-idx="0">
+      <div class="prow-head">
+        <div class="pidx">01 / 05</div>
+        <div class="ptitle-wrap">
+          <div class="pcat">Web · AI · UX Case Study</div>
+          <div class="ptitle">AI-Powered Hardware Rental — RentLK</div>
+        </div>
+        <div class="ptags">
+          <span class="ptag">Web UX</span><span class="ptag">AI</span><span class="ptag">E-commerce</span>
+        </div>
+        <div class="ptoggle">+</div>
+      </div>
+      <div class="prow-body"><div class="prow-body-inner">
+        <div class="pdetail">
+          <div>
+            <p class="pdesc">An AI-integrated hardware rental web platform for Sri Lanka. The project focused on reducing friction in the rental discovery process — using AI recommendations to match users with the right equipment, designing a trust-building rental flow, and creating an intuitive dashboard for both renters and owners.</p>
+            <a href="https://www.behance.net/gallery/241408027/Hardware-Rental-Web-UX-Case-Study-AI-RentLK" target="_blank" class="pview">View case study on Behance <span class="pview-arrow">↗</span></a>
+          </div>
+          <div class="pmeta">
+            <div class="pmeta-row"><div class="pmeta-label">Platform</div><div class="pmeta-val">Web</div></div>
+            <div class="pmeta-row"><div class="pmeta-label">Focus</div><div class="pmeta-val">AI Integration · E-commerce</div></div>
+            <div class="pmeta-row"><div class="pmeta-label">Deliverables</div><div class="pmeta-val">Research · Wireframes · Prototype</div></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- 02 -->
+    <div class="prow" data-idx="1">
+      <div class="prow-head">
+        <div class="pidx">02 / 05</div>
+        <div class="ptitle-wrap">
+          <div class="pcat">Mobile · Agriculture · Social Impact</div>
+          <div class="ptitle">Farming Support Mobile App — Sri Lanka</div>
+        </div>
+        <div class="ptags">
+          <span class="ptag">Mobile UX</span><span class="ptag">Social Impact</span><span class="ptag">Research</span>
+        </div>
+        <div class="ptoggle">+</div>
+      </div>
+      <div class="prow-body"><div class="prow-body-inner">
+        <div class="pdetail">
+          <div>
+            <p class="pdesc">A mobile application designed to support Sri Lankan farmers with real-time weather alerts, crop disease identification, and market pricing information. Extensive field research with farming communities shaped an interface optimised for low-literacy users and low-bandwidth conditions.</p>
+            <a href="https://www.behance.net/gallery/207895733/UX-Case-Study-Farming-Support-Mobile-App-(Sri-Lanka)" target="_blank" class="pview">View case study on Behance <span class="pview-arrow">↗</span></a>
+          </div>
+          <div class="pmeta">
+            <div class="pmeta-row"><div class="pmeta-label">Platform</div><div class="pmeta-val">Mobile (Android)</div></div>
+            <div class="pmeta-row"><div class="pmeta-label">Focus</div><div class="pmeta-val">Accessibility · Low Bandwidth</div></div>
+            <div class="pmeta-row"><div class="pmeta-label">Deliverables</div><div class="pmeta-val">Field Research · UX · UI Design</div></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- 03 -->
+    <div class="prow" data-idx="2">
+      <div class="prow-head">
+        <div class="pidx">03 / 05</div>
+        <div class="ptitle-wrap">
+          <div class="pcat">Mobile · Public Transit · Navigation</div>
+          <div class="ptitle">Bus Tracking Mobile App — UX Case Study</div>
+        </div>
+        <div class="ptags">
+          <span class="ptag">Mobile UX</span><span class="ptag">Maps</span><span class="ptag">Accessibility</span>
+        </div>
+        <div class="ptoggle">+</div>
+      </div>
+      <div class="prow-body"><div class="prow-body-inner">
+        <div class="pdetail">
+          <div>
+            <p class="pdesc">Redesigning public transit navigation for everyday commuters in Sri Lanka. The case study covers real-time bus tracking, intuitive route planning, and an accessible interface designed for a broad demographic — from students to senior citizens — navigating complex urban bus networks.</p>
+            <a href="https://www.behance.net/gallery/190116223/Bus-Tracking-Mobile-App-UX-Case-Study" target="_blank" class="pview">View case study on Behance <span class="pview-arrow">↗</span></a>
+          </div>
+          <div class="pmeta">
+            <div class="pmeta-row"><div class="pmeta-label">Platform</div><div class="pmeta-val">Mobile</div></div>
+            <div class="pmeta-row"><div class="pmeta-label">Focus</div><div class="pmeta-val">Navigation · Maps · Accessibility</div></div>
+            <div class="pmeta-row"><div class="pmeta-label">Deliverables</div><div class="pmeta-val">Research · Prototype · Handoff</div></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- 04 -->
+    <div class="prow" data-idx="3">
+      <div class="prow-head">
+        <div class="pidx">04 / 05</div>
+        <div class="ptitle-wrap">
+          <div class="pcat">Mobile · UI Redesign · Social</div>
+          <div class="ptitle">WhatsApp Channels Redesign</div>
+        </div>
+        <div class="ptags">
+          <span class="ptag">UI Redesign</span><span class="ptag">Social</span><span class="ptag">Mobile</span>
+        </div>
+        <div class="ptoggle">+</div>
+      </div>
+      <div class="prow-body"><div class="prow-body-inner">
+        <div class="pdetail">
+          <div>
+            <p class="pdesc">A concept redesign of WhatsApp Channels, rethinking content discovery, channel management, and notification architecture. The project explored how a familiar messaging interface could be extended into a broadcast product without disrupting existing user mental models.</p>
+            <a href="https://www.behance.net/gallery/180647133/WhatsApp-Channels-Redesign" target="_blank" class="pview">View case study on Behance <span class="pview-arrow">↗</span></a>
+          </div>
+          <div class="pmeta">
+            <div class="pmeta-row"><div class="pmeta-label">Platform</div><div class="pmeta-val">Mobile (iOS & Android)</div></div>
+            <div class="pmeta-row"><div class="pmeta-label">Focus</div><div class="pmeta-val">UI Redesign · Mental Models</div></div>
+            <div class="pmeta-row"><div class="pmeta-label">Deliverables</div><div class="pmeta-val">Concept Design · UI Screens</div></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- 05 -->
+    <div class="prow" data-idx="4">
+      <div class="prow-head">
+        <div class="pidx">05 / 05</div>
+        <div class="ptitle-wrap">
+          <div class="pcat">Mobile · Events · Internationalisation</div>
+          <div class="ptitle">Event Booking App — Bronirovanie Meroprijatij</div>
+        </div>
+        <div class="ptags">
+          <span class="ptag">Mobile UX</span><span class="ptag">Booking</span><span class="ptag">i18n</span>
+        </div>
+        <div class="ptoggle">+</div>
+      </div>
+      <div class="prow-body"><div class="prow-body-inner">
+        <div class="pdetail">
+          <div>
+            <p class="pdesc">A seamless event discovery and booking experience designed for an international audience. The project tackled multi-language support, complex booking flows with seat selection, and building trust cues for first-time users navigating a cross-cultural events platform.</p>
+            <a href="https://www.behance.net/gallery/168760715/Event-Booking-app-bronirovanie-meroprijatij-" target="_blank" class="pview">View case study on Behance <span class="pview-arrow">↗</span></a>
+          </div>
+          <div class="pmeta">
+            <div class="pmeta-row"><div class="pmeta-label">Platform</div><div class="pmeta-val">Mobile</div></div>
+            <div class="pmeta-row"><div class="pmeta-label">Focus</div><div class="pmeta-val">Booking Flow · i18n · Trust Design</div></div>
+            <div class="pmeta-row"><div class="pmeta-label">Deliverables</div><div class="pmeta-val">UX · UI · Prototype</div></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+  </div><!-- /plist -->
+
+  <!-- Behance strip -->
+  <div class="bstrip rv" style="transition-delay:.15s">
+    <div class="bstrip-glow"></div>
+    <div class="bstrip-text">
+      <h3>More on Behance</h3>
+      <p>Full case studies, UI explorations, and graphic design work.</p>
+    </div>
+    <a href="https://www.behance.net/MCEYE_Graphics" target="_blank" class="btn">View all on Behance ↗</a>
+  </div>
+
+</div>
+</div><!-- /projects -->
+
+<!-- PROCESS -->
+<section id="process" class="sec">
+  <div class="slabel">My process</div>
+  <div class="pgrid rv">
+    <div class="pstep"><div class="pstep-n">01</div><div class="pstep-t">Discover</div><div class="pstep-d">Deep user research, interviews, competitive analysis, and stakeholder alignment to understand the real problem space before touching a wireframe.</div></div>
+    <div class="pstep"><div class="pstep-n">02</div><div class="pstep-t">Define</div><div class="pstep-d">Synthesising insights into clear problem statements, personas, journey maps, and design principles that guide every subsequent decision.</div></div>
+    <div class="pstep"><div class="pstep-n">03</div><div class="pstep-t">Design</div><div class="pstep-d">Rapid wireframing to high-fidelity prototyping — iterating quickly, always grounded in user needs and business goals.</div></div>
+    <div class="pstep"><div class="pstep-n">04</div><div class="pstep-t">Deliver</div><div class="pstep-d">Validated through usability testing, then handed off with thorough documentation, design tokens, and close developer collaboration.</div></div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<div id="experience">
+<div class="exp-inner">
+  <div class="slabel">Experience</div>
+  <div class="elist">
+    <div class="erow rv"><div class="eyr">2024 – Present</div><div><div class="eco">Aventude</div><div class="erl">UX Designer</div><div class="eds">Leading end-to-end UX design for digital products, conducting user research, and translating insights into impactful design decisions that align with business strategy.</div></div><div class="earr">↗</div></div>
+    <div class="erow rv"><div class="eyr">2023</div><div><div class="eco">Codimite</div><div class="erl">UI/UX Designer</div><div class="eds">Designed intuitive interfaces and contributed to end-to-end product design workflows in an agile environment.</div></div><div class="earr">↗</div></div>
+    <div class="erow rv"><div class="eyr">2022 – 2023</div><div><div class="eco">Dialog Axiata PLC</div><div class="erl">UX Designer</div><div class="eds">Improved digital product experiences for millions of users at one of Sri Lanka's largest telecoms.</div></div><div class="earr">↗</div></div>
+    <div class="erow rv"><div class="eyr">2020 – 2022</div><div><div class="eco">My Fitformula Technologies</div><div class="erl">UI/UX Designer — Atlanta, USA</div><div class="eds">Designed health-tech digital experiences for a US-based startup, balancing user needs with compliance and technical constraints.</div></div><div class="earr">↗</div></div>
+    <div class="erow rv"><div class="eyr">2022</div><div><div class="eco">Cheplan</div><div class="erl">UI/UX Designer — Milano, Italy</div><div class="eds">Remote collaboration with an Italian team, delivering product design with strong visual polish and cross-cultural sensitivity.</div></div><div class="earr">↗</div></div>
+    <div class="erow rv"><div class="eyr">2016 – Present</div><div><div class="eco">McEye Graphics</div><div class="erl">UI Designer & Graphic Designer</div><div class="eds">10+ years of independent creative work spanning graphic design, brand identity, UI design, and visual communication.</div></div><div class="earr">↗</div></div>
+  </div>
+</div>
+</div>
+
+<!-- SKILLS -->
+<section id="skills" class="sec">
+  <div class="slabel">Toolkit</div>
+  <h2 class="sk-h2">Skills &amp; <em>capabilities</em></h2>
+  <div class="skclusters">
+    <div class="skc rv"><div class="skch" onclick="toggleSk(this)"><div class="skcn">01</div><div class="skcname">UX Design</div><div class="skct">−</div></div><div class="skcb"><div class="sktag">User Research</div><div class="sktag">Wireframing</div><div class="sktag">Prototyping</div><div class="sktag">Usability Testing</div><div class="sktag">Information Architecture</div><div class="sktag">User Flows</div><div class="sktag">Journey Mapping</div><div class="sktag">User Psychology</div></div></div>
+    <div class="skc rv" style="transition-delay:.1s"><div class="skch" onclick="toggleSk(this)"><div class="skcn">02</div><div class="skcname">Visual & UI Design</div><div class="skct">−</div></div><div class="skcb"><div class="sktag">Visual Design</div><div class="sktag">Design Systems</div><div class="sktag">Graphic Design</div><div class="sktag">Brand Identity</div><div class="sktag">Typography</div><div class="sktag">Adobe XD</div><div class="sktag">Figma</div><div class="sktag">Adobe Suite</div></div></div>
+    <div class="skc rv" style="transition-delay:.2s"><div class="skch" onclick="toggleSk(this)"><div class="skcn">03</div><div class="skcname">Strategy & Process</div><div class="skct">−</div></div><div class="skcb"><div class="sktag">Scrum / Agile</div><div class="sktag">Business Development</div><div class="sktag">Conversational AI</div><div class="sktag">Stakeholder Collaboration</div><div class="sktag">UX Research Logistics</div><div class="sktag">Design Principles</div></div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="sec">
+  <div class="slabel">Let's work</div>
+  <div class="cgrid">
+    <div class="ctext rv">
+      <h2>Got a big<br><em>idea?</em></h2>
+      <p>Whether you're building something new, refining an existing product, or just exploring what's possible — I'm always open to a good conversation.</p>
+    </div>
+    <div class="clinks rv" style="transition-delay:.15s">
+      <a href="mailto:pinindu97@gmail.com" class="clink"><div><div class="cll">Email</div><div class="clv">pinindu97@gmail.com</div></div><div class="cla">↗</div></a>
+      <a href="https://www.behance.net/MCEYE_Graphics" target="_blank" class="clink"><div><div class="cll">Behance</div><div class="clv">behance.net/MCEYE_Graphics</div></div><div class="cla">↗</div></a>
+      <a href="https://www.linkedin.com/in/pininduchethiya001" target="_blank" class="clink"><div><div class="cll">LinkedIn</div><div class="clv">pininduchethiya001</div></div><div class="cla">↗</div></a>
+      <a href="https://github.com/Pinindu" target="_blank" class="clink"><div><div class="cll">GitHub</div><div class="clv">github.com/Pinindu</div></div><div class="cla">↗</div></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fname">Pinindu Chethiya</div>
+  <div class="fcopy">© 2025 — UX Designer, Sri Lanka</div>
+</footer>
+
+<script>
+/* CURSOR */
+const cur=document.getElementById('cur'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function rng(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(rng);})();
+const hov='a,button,.scard,.erow,.skch,.sktag,.pstep,.prow,.bpill,.bstrip';
+document.querySelectorAll(hov).forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.classList.add('on');ring.classList.add('on');});
+  el.addEventListener('mouseleave',()=>{cur.classList.remove('on');ring.classList.remove('on');});
+});
+
+/* PARTICLES */
+const pc=document.getElementById('hpar');
+const cols=['var(--accent)','var(--accent)','var(--accent)','var(--accent3)','var(--accent2)'];
+for(let i=0;i<24;i++){const p=document.createElement('div');p.className='hp';p.style.cssText=`left:${Math.random()*100}%;top:${55+Math.random()*45}%;--d:${3+Math.random()*4.5}s;--dl:${Math.random()*6}s;background:${cols[i%cols.length]};`;pc.appendChild(p);}
+
+/* SCROLL REVEAL */
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.07});
+document.querySelectorAll('.rv').forEach(r=>obs.observe(r));
+
+/* COUNTERS */
+function cnt(el,t,d){let s=null;function f(ts){if(!s)s=ts;const p=Math.min((ts-s)/d,1);el.textContent=Math.floor(p*t);if(p<1)requestAnimationFrame(f);else el.textContent=t;}requestAnimationFrame(f);}
+const co=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){cnt(e.target,+e.target.dataset.t,1100);co.unobserve(e.target);}});},{threshold:.5});
+document.querySelectorAll('.count').forEach(el=>co.observe(el));
+
+/* PROJECT ACCORDION */
+document.querySelectorAll('.prow').forEach(row=>{
+  row.querySelector('.prow-head').addEventListener('click',()=>{
+    const isOpen=row.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.prow').forEach(r=>{
+      r.classList.remove('open');
+      r.querySelector('.ptoggle').textContent='+';
+    });
+    // Open clicked if was closed
+    if(!isOpen){
+      row.classList.add('open');
+      row.querySelector('.ptoggle').textContent='×';
+      // Smooth scroll so expanded row is visible
+      setTimeout(()=>{
+        const rect=row.getBoundingClientRect();
+        if(rect.bottom>window.innerHeight-60){
+          window.scrollBy({top:rect.bottom-window.innerHeight+100,behavior:'smooth'});
+        }
+      },350);
+    }
+  });
+});
+
+/* SKILL TOGGLE */
+function toggleSk(h){const b=h.nextElementSibling,t=h.querySelector('.skct'),o=b.style.display!=='none';b.style.display=o?'none':'flex';t.textContent=o?'+':'−';}
+
+/* NAV on scroll */
+window.addEventListener('scroll',()=>{document.getElementById('nav').style.backdropFilter=scrollY>60?'blur(16px)':'none';},{passive:true});
+</script>
+</body>
+</html>
